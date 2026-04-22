@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitHub Copilot &amp; Ontolog&#237;as &#8212; Taller INEGI</title>
+<style>@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&family=Source+Sans+3:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');</style>
+<style>
+:root{--brand-primary:#003D6B;--brand-primary-dark:#002A4A;--brand-primary-light:#0A5A9E;--brand-secondary:#00A5E5;--brand-secondary-light:#4DC8F6;--brand-accent:#10B981;--brand-accent-warm:#F59E0B;--brand-accent-coral:#F97316;--bg-hero:#0C1B2E;--bg-dark:#0F1D30;--bg-dark-alt:#142640;--bg-card-dark:#1A2F4A;--bg-light:#F0F6FC;--bg-white:#FFF;--bg-section-alt:#F8FAFD;--text-dark:#0F172A;--text-dark-secondary:#475569;--text-light:#E2E8F0;--text-light-secondary:#94A3B8;--text-white:#FFF;--text-brand:#00A5E5;--success:#10B981;--danger:#EF4444;--gradient-hero:linear-gradient(135deg,#0C1B2E 0%,#003D6B 40%,#0A5A9E 100%);--gradient-brand:linear-gradient(135deg,#003D6B 0%,#00A5E5 100%);--gradient-accent:linear-gradient(135deg,#10B981 0%,#00A5E5 100%);--gradient-warm:linear-gradient(135deg,#F59E0B 0%,#F97316 100%);--gradient-dark:linear-gradient(180deg,#0C1B2E 0%,#142640 100%);--gradient-cta:linear-gradient(135deg,#003D6B 0%,#00A5E5 50%,#10B981 100%);--gradient-text:linear-gradient(135deg,#00A5E5 0%,#10B981 100%);--shadow-sm:0 1px 3px rgba(0,0,0,.08);--shadow-md:0 4px 14px rgba(0,0,0,.08);--shadow-lg:0 20px 40px rgba(0,0,0,.06);--shadow-xl:0 25px 60px rgba(0,61,107,.12);--shadow-card-hover:0 20px 50px rgba(0,61,107,.15);--shadow-glow:0 0 40px rgba(0,165,229,.15);--radius-sm:8px;--radius-md:12px;--radius-lg:16px;--radius-xl:24px;--radius-pill:50px;--font-display:'Plus Jakarta Sans',sans-serif;--font-body:'Source Sans 3',sans-serif;--font-mono:'JetBrains Mono',monospace;--ease-out:cubic-bezier(.16,1,.3,1);--duration-fast:200ms;--duration-normal:350ms;--duration-slow:600ms}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font-body);color:var(--text-dark);line-height:1.65;overflow-x:hidden;background:var(--bg-white)}
+img{max-width:100%;display:block}a{text-decoration:none;color:inherit}
+h1,h2,h3,h4,h5,h6{font-family:var(--font-display);line-height:1.15;letter-spacing:-.03em;font-weight:700}
+h1{font-size:clamp(2.2rem,5vw,4rem)}h2{font-size:clamp(1.6rem,3.5vw,2.8rem)}h3{font-size:clamp(1.2rem,2.2vw,1.6rem)}
+h4{font-size:clamp(1rem,1.5vw,1.25rem)}p{font-size:clamp(.95rem,1.1vw,1.1rem)}
+code{font-family:var(--font-mono);font-size:.85em;background:rgba(0,61,107,.06);padding:.15em .4em;border-radius:4px}
+.dark-section code{background:rgba(0,165,229,.15);color:var(--brand-secondary-light)}
+nav{position:fixed;top:0;left:0;width:100%;z-index:1000;padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;transition:all .4s var(--ease-out);background:transparent}
+nav.scrolled{background:rgba(12,27,46,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:.6rem 2rem;box-shadow:0 4px 30px rgba(0,0,0,.2)}
+.nav-logo{display:flex;align-items:center;gap:.8rem}.nav-logo img{height:36px;width:auto;filter:brightness(0) invert(1);transition:height .3s var(--ease-out)}
+nav.scrolled .nav-logo img{height:28px}.nav-logo-text{font-family:var(--font-display);font-weight:700;font-size:.85rem;color:var(--text-white);opacity:.9}
+.nav-links{display:flex;gap:.3rem;list-style:none}
+.nav-links a{color:rgba(255,255,255,.75);font-family:var(--font-display);font-size:.75rem;font-weight:500;padding:.4rem .7rem;border-radius:var(--radius-pill);transition:all var(--duration-normal) var(--ease-out);white-space:nowrap}
+.nav-links a:hover,.nav-links a:focus-visible{color:var(--text-white);background:rgba(255,255,255,.1)}
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;z-index:1001}
+.nav-hamburger span{display:block;width:24px;height:2px;background:var(--text-white);border-radius:2px;transition:all .3s}
+.hero{min-height:100vh;background:var(--gradient-hero);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:6rem 2rem 4rem}
+.hero::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(0,165,229,.12) 0%,transparent 70%);top:-200px;right:-200px;pointer-events:none;animation:float-orb 20s ease-in-out infinite}
+.hero::after{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(16,185,129,.08) 0%,transparent 70%);bottom:-100px;left:-100px;pointer-events:none;animation:float-orb 15s ease-in-out infinite reverse}
+@keyframes float-orb{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-40px) scale(1.05)}66%{transform:translate(-20px,20px) scale(.95)}}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,165,229,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,165,229,.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.hero-content{text-align:center;max-width:900px;position:relative;z-index:2}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(0,165,229,.12);border:1px solid rgba(0,165,229,.25);color:var(--brand-secondary-light);font-family:var(--font-display);font-size:.8rem;font-weight:600;padding:.5rem 1.2rem;border-radius:var(--radius-pill);margin-bottom:1.5rem;letter-spacing:.05em;text-transform:uppercase}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:var(--brand-accent);animation:pulse-dot 2s ease-in-out infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.5)}}
+.hero h1{color:var(--text-white);margin-bottom:1.5rem;font-weight:800;letter-spacing:-.04em}
+.hero h1 .hl{background:var(--gradient-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{color:var(--text-light-secondary);font-size:clamp(1.05rem,1.5vw,1.25rem);max-width:650px;margin:0 auto 2.5rem;line-height:1.7}
+.hero-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1.5rem;max-width:700px;margin:0 auto}
+.hero-stat .number{display:block;font-family:var(--font-display);font-size:clamp(2rem,4vw,3rem);font-weight:800;color:var(--text-white);letter-spacing:-.03em}
+.hero-stat .label{display:block;font-family:var(--font-display);font-size:.75rem;font-weight:600;color:var(--text-light-secondary);text-transform:uppercase;letter-spacing:.08em;margin-top:.3rem}
+
+section{padding:clamp(4rem,8vw,7rem) clamp(1.5rem,5vw,4rem)}
+.section-inner{max-width:1100px;margin:0 auto}
+.section-label{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--font-display);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem}
+.section-label.brand{color:var(--brand-secondary)}.section-label.accent{color:var(--brand-accent)}.section-label.warm{color:var(--brand-accent-warm)}.section-label.coral{color:var(--brand-accent-coral)}
+.label-line{width:32px;height:2px;border-radius:2px}
+.section-label.brand .label-line{background:var(--brand-secondary)}.section-label.accent .label-line{background:var(--brand-accent)}.section-label.warm .label-line{background:var(--brand-accent-warm)}.section-label.coral .label-line{background:var(--brand-accent-coral)}
+.section-title{margin-bottom:1rem}.section-desc{color:var(--text-dark-secondary);max-width:680px;margin-bottom:3rem;font-size:clamp(1rem,1.2vw,1.15rem);line-height:1.7}
+.dark-section{background:var(--gradient-dark);color:var(--text-light)}
+.dark-section .section-title{color:var(--text-white)}.dark-section .section-desc{color:var(--text-light-secondary)}
+.alt-section{background:var(--bg-section-alt)}
+/* --- CARD (used sparingly) --- */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem}
+.card{background:var(--bg-white);border-radius:var(--radius-lg);padding:2rem;position:relative;overflow:hidden;border:1px solid rgba(0,0,0,.06);transition:transform var(--duration-normal) var(--ease-out),box-shadow var(--duration-normal) var(--ease-out)}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:var(--radius-lg) var(--radius-lg) 0 0}
+.card:hover{transform:translateY(-6px);box-shadow:var(--shadow-card-hover)}
+.card.brand::before{background:var(--gradient-brand)}.card.accent::before{background:var(--gradient-accent)}.card.warm::before{background:var(--gradient-warm)}.card.coral::before{background:linear-gradient(135deg,#F97316,#EF4444)}
+.card-number{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:var(--radius-md);font-family:var(--font-display);font-weight:800;font-size:1.1rem;margin-bottom:1rem}
+.card.brand .card-number{background:rgba(0,61,107,.08);color:var(--brand-primary)}.card.accent .card-number{background:rgba(16,185,129,.08);color:var(--brand-accent)}.card.warm .card-number{background:rgba(245,158,11,.08);color:var(--brand-accent-warm)}.card.coral .card-number{background:rgba(249,115,22,.08);color:var(--brand-accent-coral)}
+.card h3{margin-bottom:.6rem;color:var(--text-dark)}.card p{color:var(--text-dark-secondary);font-size:.95rem;line-height:1.65}
+.card-dark{background:var(--bg-card-dark);border:1px solid rgba(255,255,255,.06)}
+.card-dark h3{color:var(--text-white)}.card-dark p{color:var(--text-light-secondary)}
+.card-dark:hover{box-shadow:var(--shadow-glow);border-color:rgba(0,165,229,.2)}
+.card-dark.brand .card-number{background:rgba(0,165,229,.15);color:var(--brand-secondary)}.card-dark.accent .card-number{background:rgba(16,185,129,.15);color:var(--brand-accent)}.card-dark.warm .card-number{background:rgba(245,158,11,.15);color:var(--brand-accent-warm)}
+/* --- TABLE --- */
+.comp-table{width:100%;border-collapse:separate;border-spacing:0;border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-md);font-size:.95rem}
+.comp-table thead th{font-family:var(--font-display);font-weight:700;font-size:.85rem;text-transform:uppercase;letter-spacing:.06em;padding:1rem 1.5rem;text-align:left}
+.comp-table.dark thead th{background:var(--brand-primary-dark);color:var(--text-white)}
+.comp-table.dark thead th:last-child{background:rgba(0,165,229,.25);color:var(--brand-secondary-light)}
+.comp-table td{padding:.85rem 1.5rem;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:top}
+.comp-table.dark td{background:var(--bg-card-dark);color:var(--text-light)}.comp-table.dark td:last-child{color:var(--brand-secondary-light);font-weight:500}.comp-table.dark tr:last-child td{border-bottom:none}
+/* --- TWO COL / SPLIT --- */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start}
+.split-card{border-radius:var(--radius-lg);padding:2rem}
+.split-card.success-card{background:rgba(16,185,129,.04);border:1px solid rgba(16,185,129,.15)}
+.split-card.danger-card{background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.15)}
+.split-card h4{display:flex;align-items:center;gap:.5rem;margin-bottom:1rem;font-size:1.1rem}
+.check-list{list-style:none;display:flex;flex-direction:column;gap:.7rem}
+.check-list li{display:flex;align-items:flex-start;gap:.6rem;font-size:.95rem;line-height:1.5}
+.check-list .icon{flex-shrink:0;margin-top:.2rem;font-size:1rem}
+/* --- MODES (unique layout) --- */
+.modes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem}
+.mode-card{background:var(--bg-white);border-radius:var(--radius-xl);padding:2.5rem 2rem;text-align:center;border:1px solid rgba(0,0,0,.06);transition:all var(--duration-normal) var(--ease-out)}
+.mode-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-xl)}
+.mode-icon{width:64px;height:64px;border-radius:var(--radius-lg);display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 1.2rem}
+.mode-card.ask .mode-icon{background:linear-gradient(135deg,rgba(0,165,229,.1),rgba(0,165,229,.2))}
+.mode-card.edit .mode-icon{background:linear-gradient(135deg,rgba(16,185,129,.1),rgba(16,185,129,.2))}
+.mode-card.agent .mode-icon{background:linear-gradient(135deg,rgba(249,115,22,.1),rgba(249,115,22,.2))}
+.mode-tag{display:inline-block;font-family:var(--font-mono);font-size:.7rem;font-weight:600;padding:.25rem .7rem;border-radius:var(--radius-pill);margin-bottom:.8rem}
+.mode-card.ask .mode-tag{background:rgba(0,165,229,.1);color:var(--brand-secondary)}
+.mode-card.edit .mode-tag{background:rgba(16,185,129,.1);color:var(--brand-accent)}
+.mode-card.agent .mode-tag{background:rgba(249,115,22,.1);color:var(--brand-accent-coral)}
+.mode-card h3{margin-bottom:.6rem}.mode-card p{color:var(--text-dark-secondary);font-size:.9rem;margin-bottom:1rem}
+.mode-example{background:var(--bg-light);border-radius:var(--radius-md);padding:.8rem 1rem;font-family:var(--font-mono);font-size:.78rem;color:var(--text-dark-secondary);font-style:italic;line-height:1.5;text-align:left}
+
+/* --- FLOW HORIZONTAL --- */
+.flow-h{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding-bottom:1rem}
+.flow-step{flex:1;min-width:130px;text-align:center;padding:1.5rem .6rem;position:relative}
+.flow-step:not(:last-child)::after{content:'\2192';position:absolute;right:-12px;top:50%;transform:translateY(-50%);font-size:1.5rem;color:var(--brand-secondary);font-weight:300;z-index:2}
+.flow-num{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:var(--gradient-brand);color:white;font-family:var(--font-display);font-weight:800;font-size:1rem;margin-bottom:.8rem}
+.flow-step h4{font-size:.85rem;margin-bottom:.3rem;color:var(--text-white)}.flow-step p{font-size:.75rem;color:var(--text-light-secondary)}
+/* --- BRIDGE GRID (ontology mapping) --- */
+.bridge-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:center}
+.bridge-col{display:flex;flex-direction:column;gap:.8rem}
+.bridge-item{padding:.9rem 1.2rem;border-radius:var(--radius-md);font-family:var(--font-display);font-weight:600;font-size:.9rem;text-align:center;transition:transform .2s var(--ease-out)}
+.bridge-item:hover{transform:scale(1.04)}
+.bridge-item.bd{background:rgba(0,61,107,.08);color:var(--brand-primary);border:1px solid rgba(0,61,107,.12)}
+.bridge-item.onto{background:rgba(16,185,129,.08);color:#059669;border:1px solid rgba(16,185,129,.15)}
+.bridge-arrows{display:flex;flex-direction:column;align-items:center;gap:.8rem;padding:0 1rem}
+.bridge-arrow{font-size:1.2rem;color:var(--brand-secondary);opacity:.6}
+/* --- CALLOUT (used sparingly now) --- */
+.callout{border-radius:var(--radius-lg);padding:2rem 2.5rem;position:relative;margin:2rem 0}
+.callout.brand{background:rgba(0,165,229,.06);border-left:4px solid var(--brand-secondary)}
+.callout.accent{background:rgba(16,185,129,.06);border-left:4px solid var(--brand-accent)}
+.callout.warning{background:rgba(245,158,11,.06);border-left:4px solid var(--brand-accent-warm)}
+.callout blockquote{font-family:var(--font-display);font-size:1.1rem;font-weight:500;line-height:1.6;font-style:italic}
+.callout .cl-label{font-family:var(--font-display);font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem}
+.callout.brand .cl-label{color:var(--brand-secondary)}.callout.accent .cl-label{color:var(--brand-accent)}.callout.warning .cl-label{color:var(--brand-accent-warm)}
+/* --- CODE BLOCK --- */
+.code-block{background:#0D1117;border-radius:var(--radius-md);padding:1.5rem;overflow-x:auto;font-family:var(--font-mono);font-size:.82rem;line-height:1.7;color:#C9D1D9;border:1px solid rgba(255,255,255,.06);white-space:pre}
+.code-block .cm{color:#8B949E}.code-block .kw{color:#FF7B72}.code-block .str{color:#A5D6FF}.code-block .tp{color:#79C0FF}
+/* --- ARCH DIAGRAM --- */
+.arch-diag{background:var(--bg-card-dark);border-radius:var(--radius-xl);padding:2.5rem 2rem;border:1px solid rgba(255,255,255,.06);overflow-x:auto}
+.arch-pre{font-family:var(--font-mono);font-size:clamp(.55rem,.85vw,.78rem);line-height:1.6;color:var(--text-light);white-space:pre;text-align:center}
+.arch-pre .hb{color:var(--brand-secondary)}.arch-pre .hg{color:var(--brand-accent)}.arch-pre .hy{color:var(--brand-accent-warm)}.arch-pre .hc{color:var(--brand-accent-coral)}.arch-pre .hd{color:var(--text-light-secondary)}
+/* --- LLM LAYERS --- */
+.llm-layers{display:flex;flex-direction:column;gap:0;max-width:700px;margin:2rem auto}
+.llm-layer{padding:1.2rem 2rem;text-align:center;font-family:var(--font-display);font-weight:600;font-size:.95rem;transition:transform .3s var(--ease-out)}
+.llm-layer:hover{transform:scale(1.02);z-index:2}
+.llm-layer:nth-child(1){background:var(--brand-primary);color:white;border-radius:var(--radius-lg) var(--radius-lg) 0 0;font-size:1.1rem}
+.llm-layer:nth-child(2){background:var(--brand-primary-light);color:white}
+.llm-layer:nth-child(3){background:var(--brand-secondary);color:white}
+.llm-layer:nth-child(4){background:var(--brand-accent);color:white}
+.llm-layer:nth-child(5){background:var(--brand-accent-warm);color:white;border-radius:0 0 var(--radius-lg) var(--radius-lg)}
+.llm-layer small{display:block;font-weight:400;font-size:.75rem;opacity:.85;margin-top:.2rem}
+/* --- CTA --- */
+.cta-section{background:var(--gradient-cta);background-size:200% 200%;animation:grad-shift 12s ease infinite;text-align:center;color:white;position:relative;overflow:hidden}
+@keyframes grad-shift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 50%,rgba(255,255,255,.05) 0%,transparent 60%);pointer-events:none}
+.cta-content{position:relative;z-index:2;max-width:700px;margin:0 auto}
+.cta-content h2{color:white;margin-bottom:1rem}.cta-content p{color:rgba(255,255,255,.85);font-size:1.1rem;margin-bottom:2rem}
+.cta-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:.8rem}
+.cta-badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);color:white;font-family:var(--font-display);font-size:.85rem;font-weight:600;padding:.6rem 1.4rem;border-radius:var(--radius-pill);backdrop-filter:blur(10px);transition:all var(--duration-normal) var(--ease-out)}
+.cta-badge:hover{background:rgba(255,255,255,.25);transform:translateY(-2px)}
+.tag{display:inline-block;font-family:var(--font-mono);font-size:.72rem;font-weight:500;padding:.2rem .6rem;border-radius:var(--radius-sm)}
+.tag.blue{background:rgba(0,165,229,.1);color:var(--brand-secondary)}.tag.green{background:rgba(16,185,129,.1);color:var(--brand-accent)}.tag.yellow{background:rgba(245,158,11,.1);color:var(--brand-accent-warm)}
+footer{background:var(--bg-hero);color:var(--text-light-secondary);padding:2rem;text-align:center;font-size:.8rem}
+footer .footer-logos{display:flex;justify-content:center;align-items:center;gap:2rem;margin-bottom:1rem}
+footer img{height:28px;opacity:.6;filter:brightness(0) invert(1)}
+.mt-2{margin-top:2rem}.mt-3{margin-top:3rem}.text-center{text-align:center}
+/* ========= NEW DIVERSE LAYOUTS ========= */
+/* --- Hub radial (context areas) --- */
+.hub{display:grid;grid-template-columns:1fr 1fr;gap:0;max-width:700px;margin:0 auto;position:relative}
+.hub::before{content:'';position:absolute;width:80px;height:80px;background:var(--gradient-brand);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;box-shadow:0 0 30px rgba(0,165,229,.3)}
+.hub::after{content:'INEGI';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;font-family:var(--font-display);font-weight:800;font-size:.7rem;color:white;letter-spacing:.05em}
+.hub-item{padding:2rem;text-align:center;transition:background .3s}
+.hub-item:nth-child(1){border-right:1px solid rgba(0,0,0,.06);border-bottom:1px solid rgba(0,0,0,.06);border-radius:var(--radius-xl) 0 0 0}
+.hub-item:nth-child(2){border-bottom:1px solid rgba(0,0,0,.06);border-radius:0 var(--radius-xl) 0 0}
+.hub-item:nth-child(3){border-right:1px solid rgba(0,0,0,.06);border-radius:0 0 0 var(--radius-xl)}
+.hub-item:nth-child(4){border-radius:0 0 var(--radius-xl) 0}
+.hub-item:hover{background:var(--bg-light)}
+.hub-item .hub-emoji{font-size:2rem;margin-bottom:.6rem}
+.hub-item h4{font-size:1rem;margin-bottom:.3rem}
+.hub-item p{font-size:.82rem;color:var(--text-dark-secondary);line-height:1.5}
+/* --- Big number row (ontology reasons) --- */
+.big-nums{display:flex;flex-direction:column;gap:0}
+.big-num-row{display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:center;padding:1.8rem 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.big-num-row:last-child{border-bottom:none}
+.big-num-row .num{font-family:var(--font-display);font-size:clamp(2.5rem,5vw,4rem);font-weight:800;letter-spacing:-.04em;line-height:1;min-width:60px;text-align:right}
+.big-num-row .num.c1{color:var(--brand-secondary)}.big-num-row .num.c2{color:var(--brand-accent)}.big-num-row .num.c3{color:var(--brand-accent-warm)}.big-num-row .num.c4{color:var(--brand-secondary-light)}.big-num-row .num.c5{color:var(--brand-accent-coral)}
+.big-num-row h4{color:var(--text-white);margin-bottom:.2rem}
+.big-num-row p{color:var(--text-light-secondary);font-size:.9rem}
+/* --- Numbered list with line (prompting) --- */
+.num-list{counter-reset:nl;max-width:700px}
+.num-list-item{display:grid;grid-template-columns:56px 1fr;gap:1rem;align-items:start;padding:1.5rem 0;border-bottom:1px solid rgba(0,0,0,.06);counter-increment:nl}
+.num-list-item:last-child{border-bottom:none}
+.num-list-item::before{content:counter(nl);font-family:var(--font-display);font-size:1.8rem;font-weight:800;color:var(--brand-secondary);opacity:.3;text-align:center;line-height:1.2}
+.num-list-item h4{margin-bottom:.2rem}.num-list-item p{font-size:.9rem;color:var(--text-dark-secondary)}
+/* --- Horizontal strip (ai-ready components) --- */
+.strip{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-md)}
+.strip-item{padding:2rem 1.5rem;text-align:center;transition:background .3s}
+.strip-item:nth-child(odd){background:var(--bg-white)}.strip-item:nth-child(even){background:var(--bg-section-alt)}
+.strip-item:hover{background:var(--bg-light)}
+.strip-item .strip-icon{font-size:1.8rem;margin-bottom:.8rem}
+.strip-item h4{font-size:.9rem;margin-bottom:.3rem}
+.strip-item p{font-size:.78rem;color:var(--text-dark-secondary);line-height:1.5}
+/* --- Vertical timeline (next steps) --- */
+.timeline{position:relative;padding-left:40px;max-width:700px}
+.timeline::before{content:'';position:absolute;left:15px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--brand-secondary),var(--brand-accent),var(--brand-accent-warm),var(--brand-accent-coral))}
+.tl-item{position:relative;padding-bottom:2.5rem}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{content:'';position:absolute;left:-29px;top:6px;width:12px;height:12px;border-radius:50%;border:3px solid var(--brand-secondary);background:var(--bg-card-dark)}
+.tl-item:nth-child(2)::before{border-color:var(--brand-accent)}
+.tl-item:nth-child(3)::before{border-color:var(--brand-accent-warm)}
+.tl-item:nth-child(4)::before{border-color:var(--brand-accent-coral)}
+.tl-item h4{color:var(--text-white);margin-bottom:.3rem}
+.tl-item p{color:var(--text-light-secondary);font-size:.9rem}
+/* --- Persona orbit (circular) --- */
+.orbit{position:relative;max-width:600px;margin:0 auto;min-height:380px;display:flex;align-items:center;justify-content:center}
+.orbit-center{width:140px;height:140px;border-radius:50%;background:var(--gradient-brand);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;z-index:2;box-shadow:0 0 40px rgba(0,165,229,.2)}
+.orbit-center .orbit-emoji{font-size:2rem;margin-bottom:.3rem}
+.orbit-center h4{color:white;font-size:.85rem}
+.orbit-center p{color:rgba(255,255,255,.7);font-size:.65rem}
+.orbit-ring{position:absolute;inset:0;border:1px dashed rgba(0,165,229,.15);border-radius:50%}
+.orbit-node{position:absolute;width:100px;background:var(--bg-white);border-radius:var(--radius-lg);padding:.8rem;text-align:center;box-shadow:var(--shadow-md);border:1px solid rgba(0,0,0,.06);transition:transform .3s var(--ease-out),box-shadow .3s}
+.orbit-node:hover{transform:scale(1.08);box-shadow:var(--shadow-xl)}
+.orbit-node .on-emoji{font-size:1.3rem;margin-bottom:.3rem}
+.orbit-node h5{font-size:.7rem;font-family:var(--font-display);font-weight:600;line-height:1.2}
+.orbit-node:nth-child(3){top:10px;left:50%;transform:translateX(-50%)}
+.orbit-node:nth-child(4){top:50%;right:0;transform:translateY(-50%)}
+.orbit-node:nth-child(5){bottom:10px;left:50%;transform:translateX(-50%)}
+.orbit-node:nth-child(6){top:50%;left:0;transform:translateY(-50%)}
+/* --- Inline tags (instead of card grid) --- */
+.tag-cloud{display:flex;flex-wrap:wrap;gap:.6rem;margin:1rem 0}
+.tag-cloud .tc{display:inline-flex;align-items:center;gap:.4rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:var(--text-light);font-family:var(--font-display);font-size:.82rem;font-weight:500;padding:.5rem 1rem;border-radius:var(--radius-pill);transition:all .3s}
+.tag-cloud .tc:hover{background:rgba(0,165,229,.1);border-color:rgba(0,165,229,.3)}
+/* --- Prompt accordion-style list --- */
+.prompt-list{display:flex;flex-direction:column;gap:.5rem}
+.prompt-item{background:var(--bg-card-dark);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius-md);padding:1.2rem 1.5rem;transition:border-color .3s,transform .2s}
+.prompt-item:hover{border-color:rgba(0,165,229,.25);transform:translateX(4px)}
+.prompt-item h4{color:var(--brand-secondary-light);font-size:.85rem;margin-bottom:.3rem;display:flex;align-items:center;gap:.5rem}
+.prompt-item p{color:var(--text-light-secondary);font-family:var(--font-mono);font-size:.75rem;line-height:1.6;font-style:italic;margin:0}
+
+/* --- ATOMIC ORBIT DIAGRAM (copilot agent) --- */
+.atom{position:relative;width:340px;height:340px;margin:2rem auto}
+.atom-core{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:80px;height:80px;border-radius:50%;background:var(--gradient-brand);display:flex;align-items:center;justify-content:center;z-index:5;box-shadow:0 0 50px rgba(0,165,229,.4),0 0 100px rgba(0,165,229,.15);font-size:2rem}
+.atom-ring{position:absolute;inset:20px;border:1.5px solid rgba(0,165,229,.12);border-radius:50%;animation:atom-spin 30s linear infinite}
+.atom-ring:nth-child(2){inset:0;animation-duration:25s;animation-direction:reverse;transform:rotate(60deg)}
+.atom-ring:nth-child(3){inset:10px;animation-duration:35s;transform:rotate(-30deg)}
+@keyframes atom-spin{to{transform:rotate(360deg)}}
+.atom-node{position:absolute;z-index:4;text-align:center;transition:transform .3s var(--ease-out)}
+.atom-node:hover{transform:scale(1.1) !important}
+.atom-label{display:inline-block;background:var(--brand-secondary);color:white;font-family:var(--font-display);font-size:.78rem;font-weight:700;padding:.5rem 1.2rem;border-radius:var(--radius-pill);box-shadow:0 4px 15px rgba(0,165,229,.3);white-space:nowrap}
+.atom-label.green{background:var(--brand-accent)}.atom-label.warm{background:var(--brand-accent-warm)}.atom-label.coral{background:var(--brand-accent-coral)}
+.atom-icon{font-size:1.3rem;margin-bottom:.3rem}
+.atom-node.top{top:-15px;left:50%;transform:translateX(-50%)}
+.atom-node.right{top:50%;right:-60px;transform:translateY(-50%)}
+.atom-node.bottom{bottom:-15px;left:50%;transform:translateX(-50%)}
+.atom-node.left{top:50%;left:-50px;transform:translateY(-50%)}
+.model-swap{text-align:center;margin-top:1.5rem}
+.model-swap p{color:var(--text-light-secondary);font-size:.85rem;margin-bottom:.5rem}
+.model-swap .swap-icons{display:flex;align-items:center;justify-content:center;gap:.5rem;font-size:1.5rem}
+.model-swap .swap-arrow{color:var(--brand-secondary);font-size:1rem;animation:swap-pulse 2s ease-in-out infinite}
+@keyframes swap-pulse{0%,100%{opacity:.4}50%{opacity:1}}
+@media(max-width:600px){.atom{width:260px;height:260px}.atom-core{width:60px;height:60px;font-size:1.5rem}.atom-node.right{right:-40px}.atom-node.left{left:-30px}.atom-label{font-size:.68rem;padding:.4rem .8rem}}
+/* --- DEMO SECTIONS --- */
+.demo-badge{display:inline-flex;align-items:center;gap:.5rem;background:linear-gradient(135deg,#F59E0B,#F97316);color:#fff;font-family:var(--font-display);font-size:.7rem;font-weight:700;padding:.4rem 1rem;border-radius:var(--radius-pill);letter-spacing:.08em;text-transform:uppercase;margin-bottom:1rem;box-shadow:0 4px 15px rgba(245,158,11,.3)}
+.terminal{background:#0D1117;border-radius:var(--radius-lg);overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.06);max-width:800px}
+.terminal-bar{display:flex;align-items:center;gap:.5rem;padding:.8rem 1rem;background:#161B22;border-bottom:1px solid rgba(255,255,255,.06)}
+.terminal-dot{width:10px;height:10px;border-radius:50%}
+.terminal-dot.r{background:#FF5F57}.terminal-dot.y{background:#FEBC2E}.terminal-dot.g{background:#28C840}
+.terminal-title{font-family:var(--font-mono);font-size:.7rem;color:var(--text-light-secondary);margin-left:.5rem}
+.terminal-body{padding:1.5rem;font-family:var(--font-mono);font-size:.8rem;line-height:1.8;color:#C9D1D9;overflow-x:auto}
+.terminal-body .user-msg{color:var(--brand-secondary-light)}
+.terminal-body .copilot-msg{color:var(--brand-accent);font-style:italic}
+.terminal-body .prompt-sym{color:var(--brand-accent-warm);font-weight:700}
+.terminal-body .file-ref{color:var(--brand-accent-coral)}
+.terminal-body .dim{color:#6E7681}
+.file-tree{font-family:var(--font-mono);font-size:.82rem;line-height:2;color:var(--text-light)}
+.file-tree .dir{color:var(--brand-secondary-light);font-weight:600}
+.file-tree .file{color:var(--text-light-secondary)}
+.file-tree .hl-file{color:var(--brand-accent);font-weight:600}
+.file-tree .indent{margin-left:1.5rem}
+.demo-step{display:grid;grid-template-columns:64px 1fr;gap:1.5rem;align-items:start;padding:2rem 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.demo-step:last-child{border-bottom:none}
+.demo-step-num{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:800;font-size:1.2rem;color:white;flex-shrink:0}
+.demo-step-num.s1{background:linear-gradient(135deg,var(--brand-secondary),var(--brand-primary))}
+.demo-step-num.s2{background:linear-gradient(135deg,var(--brand-accent),#059669)}
+.demo-step-num.s3{background:linear-gradient(135deg,var(--brand-accent-warm),var(--brand-accent-coral))}
+.demo-step h4{color:var(--text-white);margin-bottom:.4rem;font-size:1.1rem}
+.demo-step p{color:var(--text-light-secondary);font-size:.9rem;margin-bottom:.8rem}
+.demo-prompt{background:rgba(0,165,229,.08);border:1px solid rgba(0,165,229,.15);border-radius:var(--radius-md);padding:.8rem 1.2rem;font-family:var(--font-mono);font-size:.78rem;color:var(--brand-secondary-light);line-height:1.6}
+.context-diagram{display:grid;grid-template-columns:1fr auto 1fr;gap:1.5rem;align-items:center;max-width:900px;margin:2rem auto}
+.ctx-box{border-radius:var(--radius-lg);padding:1.5rem;text-align:center}
+.ctx-box h4{margin-bottom:.5rem;font-size:.95rem}
+.ctx-box p{font-size:.8rem;line-height:1.5}
+.ctx-box.input{background:rgba(0,165,229,.08);border:1px solid rgba(0,165,229,.15)}.ctx-box.input h4{color:var(--brand-secondary-light)}
+.ctx-box.input p{color:var(--text-light-secondary)}
+.ctx-box.process{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.15)}.ctx-box.process h4{color:var(--brand-accent)}
+.ctx-box.process p{color:var(--text-light-secondary)}
+.ctx-box.output{background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.15)}.ctx-box.output h4{color:var(--brand-accent-coral)}
+.ctx-box.output p{color:var(--text-light-secondary)}
+.ctx-arrow{font-size:2rem;color:var(--brand-secondary);opacity:.5}
+@media(max-width:900px){.context-diagram{grid-template-columns:1fr;gap:.8rem}.ctx-arrow{transform:rotate(90deg);text-align:center}.demo-step{grid-template-columns:48px 1fr;gap:1rem}.demo-step-num{width:44px;height:44px;font-size:1rem}}
+/* --- ANIMATIONS + RESPONSIVE + CLOSE HEAD --- */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity var(--duration-slow) var(--ease-out),transform var(--duration-slow) var(--ease-out)}.reveal.active{opacity:1;transform:translateY(0)}
+.reveal-left{opacity:0;transform:translateX(-50px);transition:opacity var(--duration-slow) var(--ease-out),transform var(--duration-slow) var(--ease-out)}.reveal-left.active{opacity:1;transform:translateX(0)}
+.reveal-right{opacity:0;transform:translateX(50px);transition:opacity var(--duration-slow) var(--ease-out),transform var(--duration-slow) var(--ease-out)}.reveal-right.active{opacity:1;transform:translateX(0)}
+.reveal-scale{opacity:0;transform:scale(.9);transition:opacity var(--duration-slow) var(--ease-out),transform var(--duration-slow) var(--ease-out)}.reveal-scale.active{opacity:1;transform:scale(1)}
+.stagger>*{opacity:0;transform:translateY(30px);transition:opacity var(--duration-slow) var(--ease-out),transform var(--duration-slow) var(--ease-out)}
+.stagger.active>*:nth-child(1){transition-delay:0ms}.stagger.active>*:nth-child(2){transition-delay:80ms}.stagger.active>*:nth-child(3){transition-delay:160ms}.stagger.active>*:nth-child(4){transition-delay:240ms}.stagger.active>*:nth-child(5){transition-delay:320ms}.stagger.active>*:nth-child(6){transition-delay:400ms}.stagger.active>*:nth-child(7){transition-delay:480ms}.stagger.active>*:nth-child(8){transition-delay:560ms}.stagger.active>*:nth-child(9){transition-delay:640ms}.stagger.active>*:nth-child(10){transition-delay:720ms}
+.stagger.active>*{opacity:1;transform:translateY(0)}
+@media(max-width:900px){.nav-links{display:none}.nav-hamburger{display:flex}.nav-links.open{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(12,27,46,.98);backdrop-filter:blur(20px);justify-content:center;align-items:center;gap:.5rem;z-index:1000}.nav-links.open a{font-size:1.2rem;padding:.8rem 2rem}.two-col{grid-template-columns:1fr;gap:1.5rem}.bridge-grid{grid-template-columns:1fr;gap:1rem}.bridge-arrows{flex-direction:row;padding:.5rem 0}.bridge-arrow{transform:rotate(90deg)}.flow-h{flex-direction:column}.flow-step:not(:last-child)::after{content:'\2193';right:50%;top:auto;bottom:-16px;transform:translateX(50%)}.hero-stats{grid-template-columns:repeat(2,1fr)}.modes-grid{grid-template-columns:1fr}.strip{grid-template-columns:1fr 1fr}.orbit{min-height:auto;flex-direction:column;gap:1rem}.orbit-ring{display:none}.orbit-node{position:static !important;transform:none !important;width:auto}.hub{max-width:100%}}
+@media(max-width:500px){section{padding:3rem 1.2rem}.hero{padding:5rem 1.2rem 3rem}.hero-stats{grid-template-columns:1fr 1fr;gap:1rem}.cards-grid{grid-template-columns:1fr}.strip{grid-template-columns:1fr}.hub{grid-template-columns:1fr}.hub::before,.hub::after{display:none}.hub-item{border-right:none !important;border-radius:0 !important}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}html{scroll-behavior:auto}.reveal,.reveal-left,.reveal-right,.reveal-scale{opacity:1;transform:none}.stagger>*{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<nav>
+<div class="nav-logo"><img src="https://www.inegi.org.mx/img/home/logoinegibco.png" alt="INEGI"><span class="nav-logo-text">× GitHub Copilot</span></div>
+<ul class="nav-links" id="navLinks">
+<li><a href="#contexto">Contexto</a></li><li><a href="#aidev">AI Dev</a></li><li><a href="#copilot">Copilot</a></li><li><a href="#modos">Modos</a></li><li><a href="#demo-context">Contexto LLM</a></li><li><a href="#demo-awesome">Awesome</a></li><li><a href="#agentes">Agentes</a></li><li><a href="#mcp">MCP</a></li><li><a href="#ontologias">Ontologías</a></li>
+</ul>
+<div class="nav-hamburger" id="hamburger" role="button" tabindex="0" aria-label="Menu"><span></span><span></span><span></span></div>
+</nav>
+
+<section class="hero" id="inicio">
+<div class="hero-grid"></div>
+<div class="hero-content">
+<div class="hero-badge reveal"><span class="badge-dot"></span>Taller Técnico 2026</div>
+<h1 class="reveal">GitHub Copilot &amp;<br><span class="hl">Ontologías en BD</span></h1>
+<p class="hero-sub reveal">Reimaginando el desarrollo de software con <strong style="color:var(--brand-secondary-light)">AI &amp; Agentic DevOps</strong>. De bases de datos tradicionales a modelos AI-Ready.</p>
+<div class="hero-stats stagger">
+<div class="hero-stat"><span class="number" data-count="4">4</span><span class="label">Áreas de Datos</span></div>
+<div class="hero-stat"><span class="number" data-count="300" data-suffix="+">300+</span><span class="label">Columnas / dataset</span></div>
+<div class="hero-stat"><span class="number" data-count="126" data-suffix="M">126M</span><span class="label">Registros población</span></div>
+<div class="hero-stat"><span class="number">1</span><span class="label">Fuente de Verdad</span></div>
+</div></div></section>
+
+<!-- CONTEXTO: Hub radial instead of cards -->
+<section id="contexto">
+<div class="section-inner">
+<div class="section-label brand reveal"><span class="label-line"></span>Módulo 0 — Contexto</div>
+<h2 class="section-title reveal">¿Por qué este taller?</h2>
+<p class="section-desc reveal">INEGI genera información para todo México a través de 4 áreas autónomas. Cada una con su propio vocabulario, estructura y reglas.</p>
+<div class="hub reveal-scale">
+<div class="hub-item"><div class="hub-emoji">📊</div><h4>Economía</h4><p>PIB, inflación, censos económicos, industria manufacturera</p></div>
+<div class="hub-item"><div class="hub-emoji">👥</div><h4>SocioDemografía</h4><p>Censo de Población, ENOE, ENIGH, encuestas de hogares</p></div>
+<div class="hub-item"><div class="hub-emoji">🛡️</div><h4>Gobierno</h4><p>Seguridad pública, registros administrativos, justicia</p></div>
+<div class="hub-item"><div class="hub-emoji">🌎</div><h4>Geografía</h4><p>Cartografía, geoespacial, uso de suelo, coordenadas</p></div>
+</div>
+<div class="callout brand reveal mt-3"><div class="cl-label">🎯 La meta</div><blockquote>“Una infraestructura de difusión de datos como fuente única de la verdad, con modelos AI-Ready que cualquier consumidor pueda usar para aplicar IA.”</blockquote></div>
+</div></section>
+
+
+
+<!-- ============ DEMO: CÓMO FUNCIONAN LOS LLMs (Contexto) ============ -->
+<section id="demo-context" class="dark-section">
+<div class="section-inner">
+<div class="demo-badge reveal">🛠️ Demo en vivo</div>
+<h2 class="section-title reveal">¿Cómo entiende un LLM tu pregunta?</h2>
+<p class="section-desc reveal">Antes de practicar, entendamos <strong style="color:var(--brand-secondary-light)">qué pasa por dentro</strong> cuando le haces una pregunta a Copilot.</p>
+
+<div class="context-diagram reveal-scale">
+<div class="ctx-box input">
+<h4>📥 Tu contexto</h4>
+<p>Archivos abiertos<br>Instrucciones (.md)<br>MCPs conectados<br>Tu prompt</p>
+</div>
+<div class="ctx-arrow">→</div>
+<div class="ctx-box process">
+<h4>🧠 El LLM procesa</h4>
+<p>Tokeniza todo el contexto<br>Calcula atención entre tokens<br>Predice la mejor respuesta<br>token por token</p>
+</div>
+<div class="ctx-arrow">→</div>
+<div class="ctx-box output">
+<h4>📤 La respuesta</h4>
+<p>SQL, código, ontología<br>Explicaciones, DDL<br>Archivos nuevos<br>Acciones en terminal</p>
+</div>
+</div>
+
+<div class="reveal mt-3" style="max-width:800px;margin-left:auto;margin-right:auto">
+<h3 style="color:var(--text-white);margin-bottom:1rem">💡 La clave: entre más contexto relevante le des, mejor respuesta obtienes</h3>
+<div class="terminal">
+<div class="terminal-bar"><div class="terminal-dot r"></div><div class="terminal-dot y"></div><div class="terminal-dot g"></div><span class="terminal-title">Contexto que Copilot ve</span></div>
+<div class="terminal-body">
+<span class="dim">── Fuentes de contexto ──────────────────────</span>
+<br><br><span class="file-ref">📄 Archivo activo:</span>   <span class="dim">El archivo que tienes abierto en el editor</span>
+<br><span class="file-ref">📂 @workspace:</span>      <span class="dim">Índice de todos los archivos del proyecto</span>
+<br><span class="file-ref">📋 Instructions:</span>   <span class="dim">.github/copilot-instructions.md</span>
+<br><span class="file-ref">🤖 AGENTS.md:</span>      <span class="dim">Instrucciones específicas para agentes</span>
+<br><span class="file-ref">🔌 MCPs:</span>           <span class="dim">Herramientas conectadas (BD, filesystem, etc.)</span>
+<br><span class="file-ref">💬 Historial:</span>      <span class="dim">Conversación actual en el chat</span>
+<br><br><span class="dim">── Regla de oro ─────────────────────────────</span>
+<br><span class="copilot-msg">Más contexto relevante = Mejor respuesta</span>
+<br><span class="copilot-msg">Contexto irrelevante = Confusión y ruido</span>
+</div>
+</div>
+</div>
+</div></section>
+
+
+
+<!-- COPILOT: Atomic agent diagram -->
+<section id="copilot" class="dark-section">
+<div class="section-inner">
+<div class="section-label brand reveal"><span class="label-line"></span>Módulo 2 — La plataforma</div>
+<h2 class="section-title reveal">¿Qué es un AI Agent?</h2>
+<p class="section-desc reveal">GitHub Copilot es una <strong style="color:var(--brand-secondary-light)">plataforma de agentes</strong>. En el centro está el LLM, y a su alrededor orbitan tu código, plugins, hooks y los modelos de IA — que se actualizan automáticamente.</p>
+
+<div class="atom reveal-scale">
+<div class="atom-ring"></div>
+<div class="atom-ring"></div>
+<div class="atom-ring"></div>
+<div class="atom-core">🧠</div>
+<div class="atom-node top"><div class="atom-icon">💻</div><span class="atom-label">Tu código</span></div>
+<div class="atom-node right"><div class="atom-icon">🪝</div><span class="atom-label warm">Hooks &amp; filtros</span></div>
+<div class="atom-node bottom"><div class="atom-icon">🤖</div><span class="atom-label green">Último modelo IA</span></div>
+<div class="atom-node left"><div class="atom-icon">🔌</div><span class="atom-label coral">Plugins / MCPs</span></div>
+</div>
+
+<div class="model-swap reveal">
+<p>Los modelos se actualizan automáticamente — siempre tienes el más reciente</p>
+<div class="swap-icons">
+<span>🟣</span><span class="swap-arrow">↻</span><span>🔵</span>
+<span style="color:var(--text-light-secondary);font-size:.8rem;margin-left:.5rem">New model drop!</span>
+</div>
+</div>
+
+<div class="two-col mt-3" style="gap:2rem;max-width:800px;margin-left:auto;margin-right:auto">
+<div class="reveal-left" style="text-align:center;padding:1.5rem;background:rgba(0,165,229,.06);border:1px solid rgba(0,165,229,.15);border-radius:var(--radius-lg)">
+<h4 style="color:var(--brand-secondary-light);margin-bottom:.5rem">Agent = LLM + Instructions + Tools</h4>
+<p style="color:var(--text-light-secondary);font-size:.85rem">Un agente puede <strong>razonar</strong> sobre tu problema, <strong>actuar</strong> creando archivos y ejecutando comandos, y <strong>aprender</strong> de las instrucciones del proyecto.</p>
+</div>
+<div class="reveal-right" style="text-align:center;padding:1.5rem;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.15);border-radius:var(--radius-lg)">
+<h4 style="color:var(--brand-accent);margin-bottom:.5rem">Tú eliges el modelo</h4>
+<p style="color:var(--text-light-secondary);font-size:.85rem"><strong>GPT-4o</strong> • <strong>Claude</strong> • <strong>Gemini</strong> • <strong>o1/o3</strong> — cada uno con fortalezas distintas. Todos comparten el mismo contexto de tu workspace.</p>
+</div>
+</div>
+</div></section>
+
+
+
+<!-- MODES: 3 mode cards (unique layout, used only once) -->
+<section id="modos" class="alt-section">
+<div class="section-inner">
+<div class="section-label accent reveal"><span class="label-line"></span>Modos de uso</div>
+<h2 class="section-title reveal">Los 3 modos de Copilot</h2>
+<div class="modes-grid stagger">
+<div class="mode-card ask"><div class="mode-icon">💬</div><div class="mode-tag">Ctrl+L</div><h3>Ask</h3><p>Pregunta y explora. Ideal para entender esquemas y resolver dudas.</p><div class="mode-example">"Explícame qué hace esta vista SQL del Censo"</div></div>
+<div class="mode-card edit"><div class="mode-icon">✏️</div><div class="mode-tag">Ctrl+I</div><h3>Edit</h3><p>Cambios dirigidos. Selecciona, describe, revisa y acepta.</p><div class="mode-example">"Renombra estas 50 columnas a snake_case"</div></div>
+<div class="mode-card agent"><div class="mode-icon">🤖</div><div class="mode-tag">Agent Mode</div><h3>Agent</h3><p>Multi-paso autónomo: lee, edita, corre, itera.</p><div class="mode-example">"Genera ontología .ttl, valídala y corrígela"</div></div>
+</div></div></section>
+
+
+
+<!-- ============ DEMO: MODO ASK ============ -->
+<section class="dark-section">
+<div class="section-inner">
+<div class="demo-badge reveal">Demo en vivo</div>
+<h2 class="section-title reveal">Modo Ask: Preguntar sobre datos</h2>
+<p class="section-desc reveal">Abrimos el CSV del Censo y le preguntamos a Copilot con <code>Ctrl+L</code></p>
+<div class="terminal reveal-scale" style="max-width:700px;margin:0 auto">
+<div class="terminal-bar"><div class="terminal-dot r"></div><div class="terminal-dot y"></div><div class="terminal-dot g"></div><span class="terminal-title">Copilot Chat — Modo Ask</span></div>
+<div class="terminal-body">
+<span class="prompt-sym">▶</span> <span class="user-msg">Analiza este CSV del Censo 2020 del INEGI.</span>
+<br><span class="user-msg">Dame granularidad, claves primarias y problemas de calidad.</span>
+<br><br><span class="copilot-msg">Los datos tienen granularidad de municipio.</span>
+<br><span class="copilot-msg">Clave compuesta: (cve_ent, cve_mun)</span>
+<br><br><span class="dim">⚠️ Problemas detectados:</span>
+<br>  <span class="file-ref">Fila 15:</span> <span class="dim">cve_mun = "N/A"</span>
+<br>  <span class="file-ref">Fila 18:</span> <span class="dim">pob_total vacío</span>
+</div>
+</div>
+<p class="reveal mt-2 text-center" style="color:var(--text-light-secondary);font-size:.9rem">💡 Copilot responde diferente si el CSV <strong style="color:var(--brand-secondary-light)">está abierto</strong> vs cerrado — eso es el contexto.</p>
+</div></section>
+
+
+
+<!-- ============ DEMO: MODO AGENT ============ -->
+<section class="alt-section">
+<div class="section-inner">
+<div class="demo-badge reveal">Demo en vivo</div>
+<h2 class="section-title reveal">Modo Agent: Crear archivos automáticamente</h2>
+<p class="section-desc reveal">Cambiamos a Agent Mode (🤖) y le pedimos que <strong>genere la ontología</strong> desde el CSV.</p>
+<div class="two-col" style="gap:2.5rem">
+<div class="reveal-left">
+<div class="terminal">
+<div class="terminal-bar"><div class="terminal-dot r"></div><div class="terminal-dot y"></div><div class="terminal-dot g"></div><span class="terminal-title">Prompt en Agent Mode</span></div>
+<div class="terminal-body">
+<span class="prompt-sym">🤖</span> <span class="user-msg">Lee data/censo_2020_sample.csv.</span>
+<br><span class="user-msg">Genera ontology/censo_ontology.json</span>
+<br><span class="user-msg">con clases, propiedades y reglas</span>
+<br><span class="user-msg">de calidad.</span>
+</div>
+</div>
+</div>
+<div class="reveal-right">
+<div class="terminal">
+<div class="terminal-bar"><div class="terminal-dot r"></div><div class="terminal-dot y"></div><div class="terminal-dot g"></div><span class="terminal-title">El agente ejecuta</span></div>
+<div class="terminal-body">
+<span class="dim">Paso 1:</span> <span class="copilot-msg">Leyendo CSV...</span>
+<br><span class="dim">Paso 2:</span> <span class="file-ref">Creando ontology/censo_ontology.json</span>
+<br><span class="dim">Paso 3:</span> <span class="copilot-msg">Escribiendo 3 clases, 11 propiedades</span>
+<br><span class="dim">Paso 4:</span> <span class="copilot-msg">✓ Archivo creado</span>
+<br><br><span class="prompt-sym">▶</span> <span class="dim">Acepta o rechaza los cambios</span>
+</div>
+</div>
+</div>
+</div>
+<p class="reveal mt-2 text-center" style="color:var(--text-dark-secondary);font-size:.9rem">💡 La diferencia con Ask: el agente <strong>lee, crea y escribe archivos</strong>. No solo responde.</p>
+</div></section>
+
+
+
+<!-- ============ DEMO: AGENTE PERSONALIZADO ============ -->
+<section class="dark-section">
+<div class="section-inner">
+<div class="demo-badge reveal">Demo en vivo</div>
+<h2 class="section-title reveal">Crear un Agente Personalizado</h2>
+<p class="section-desc reveal">Un archivo <code>.agent.md</code> en <code>.github/agents/</code> crea un asistente especializado.</p>
+<div class="two-col" style="gap:2.5rem">
+<div class="reveal-left">
+<h3 style="color:var(--text-white);margin-bottom:1rem">El archivo que creamos:</h3>
+<div class="code-block" style="font-size:.75rem">---
+description: "Analista censal INEGI"
+tools: ["codebase", "search"]
+---
+
+# Analista de Datos Censales
+
+Eres un DBA senior del INEGI.
+
+SIEMPRE lee:
+- ontology/censo_ontology.json
+- data/censo_2020_sample.csv
+
+Responde en español.
+Usa nombres semánticos de la ontología.
+Reporta problemas de calidad.</div>
+</div>
+<div class="reveal-right">
+<h3 style="color:var(--text-white);margin-bottom:1rem">Después de recargar VS Code:</h3>
+<div class="terminal">
+<div class="terminal-bar"><div class="terminal-dot r"></div><div class="terminal-dot y"></div><div class="terminal-dot g"></div><span class="terminal-title">Agente: Analista Censales INEGI</span></div>
+<div class="terminal-body">
+<span class="prompt-sym">▶</span> <span class="user-msg">¿Top 3 municipios por población?</span>
+<br><br><span class="dim">📖 pob_total = "Población Total"</span>
+<br><br><span class="copilot-msg">| Municipio | Población |</span>
+<br><span class="copilot-msg">| Puebla | 1,692,181 |</span>
+<br><span class="copilot-msg">| Ecatepec | 1,645,352 |</span>
+<br><span class="copilot-msg">| Zapopan | 1,476,491 |</span>
+<br><br><span class="dim">⚠️ Boca del Río: pob_total vacío</span>
+</div>
+</div>
+<p style="color:var(--text-light-secondary);margin-top:1rem;font-size:.85rem">✨ El agente ya sabe qué leer y cómo responder — sin repetir instrucciones.</p>
+</div>
+</div>
+</div></section>
+
+
+
+<!-- ============ DEMO: AWESOME COPILOT ============ -->
+<section id="demo-awesome" class="alt-section">
+<div class="section-inner">
+<div class="demo-badge reveal">Demo</div>
+<h2 class="section-title reveal">Awesome Copilot: Agentes Beast Mode</h2>
+<p class="section-desc reveal"><a href="https://github.com/github/awesome-copilot" style="color:var(--brand-secondary);text-decoration:underline">github/awesome-copilot</a> tiene <strong>agentes, prompts e instrucciones</strong> listas para usar.</p>
+<div class="two-col" style="gap:3rem">
+<div class="reveal-left">
+<h3 style="margin-bottom:1rem">Un archivo <code>.agent.md</code> le dice a Copilot:</h3>
+<ul class="check-list">
+<li><span class="icon">&#x1F4C4;</span> <strong>Archivos a leer</strong> al inicio</li>
+<li><span class="icon">&#x1F9E0;</span> <strong>Rol a asumir</strong> &#8212; &#34;Eres un DBA senior del INEGI&#34;</li>
+<li><span class="icon">&#x1F4CA;</span> <strong>C&#243;mo presentar datos</strong> &#8212; tablas, sem&#225;ntica, calidad</li>
+<li><span class="icon">&#x1F527;</span> <strong>Herramientas</strong> &#8212; codebase, terminal, search</li>
+</ul>
+<div style="margin-top:1.5rem;padding:1.2rem;background:rgba(249,115,22,.05);border:1px solid rgba(249,115,22,.15);border-radius:var(--radius-md)">
+<h4 style="color:var(--brand-accent-coral);font-size:.85rem;margin-bottom:.4rem">Beast Mode</h4>
+<p style="font-size:.82rem;color:var(--text-dark-secondary)">Agentes pre-hechos para testing, code review, docs y m&#225;s. Nosotros crearemos uno para <strong>an&#225;lisis censal con ontolog&#237;a</strong>.</p>
+</div></div>
+<div class="reveal-right">
+<h3 style="margin-bottom:1rem">El resultado</h3>
+<div class="terminal">
+<div class="terminal-bar"><div class="terminal-dot r"></div><div class="terminal-dot y"></div><div class="terminal-dot g"></div><span class="terminal-title">Agente: Analista Censales INEGI</span></div>
+<div class="terminal-body">
+<span class="prompt-sym">&#x25B6;</span> <span class="user-msg">&#191;Top 3 municipios por poblaci&#243;n?</span>
+<br><br><span class="dim">&#x1F4D6; Ontolog&#237;a &#8594; pob_total = &#34;N&#250;mero total de personas&#34;</span>
+<br><br><span class="copilot-msg">| Municipio | Poblaci&#243;n Total |</span>
+<br><span class="copilot-msg">| Puebla | 1,692,181 |</span>
+<br><span class="copilot-msg">| Ecatepec | 1,645,352 |</span>
+<br><span class="copilot-msg">| Zapopan | 1,476,491 |</span>
+<br><br><span class="dim">&#x26A0;&#xFE0F; Boca del R&#237;o: pob_total vac&#237;o</span>
+</div></div>
+<p style="color:var(--text-dark-secondary);margin-top:1rem;font-size:.85rem;text-align:center">&#x1F4D6; <strong>Ejercicios en el README.md</strong></p>
+</div></div>
+</div></section>
+
+
+
+<!-- MCP: Simplified -->
+<section id="mcp" class="dark-section">
+<div class="section-inner">
+<div class="section-label coral reveal"><span class="label-line"></span>Conectando herramientas</div>
+<h2 class="section-title reveal">MCP: El ODBC de la IA</h2>
+<p class="section-desc reveal">As&#237; como <strong style="color:var(--brand-secondary-light)">ODBC</strong> conecta tu app a cualquier BD, <strong style="color:var(--brand-secondary-light)">MCP</strong> conecta a Copilot con cualquier herramienta.</p>
+<div class="two-col" style="gap:2.5rem;max-width:800px;margin:0 auto">
+<div class="reveal-left" style="text-align:center;padding:2rem;background:rgba(0,165,229,.06);border:1px solid rgba(0,165,229,.15);border-radius:var(--radius-lg)">
+<h3 style="color:var(--brand-secondary-light);margin-bottom:1rem;font-size:1.3rem">&#x1F50C; MCP</h3>
+<p style="color:var(--text-light-secondary);font-size:.95rem;line-height:1.7">Copilot <strong>&#x2194;</strong> Herramientas<br><br>Conecta tu BD, archivos, APIs y docs directo al chat.</p>
+</div>
+<div class="reveal-right" style="text-align:center;padding:2rem;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.15);border-radius:var(--radius-lg)">
+<h3 style="color:var(--brand-accent);margin-bottom:1rem;font-size:1.3rem">&#x1F91D; A2A</h3>
+<p style="color:var(--text-light-secondary);font-size:.95rem;line-height:1.7">Agente <strong>&#x2194;</strong> Agente<br><br>M&#250;ltiples agentes colaboran para tareas complejas.</p>
+</div></div>
+<h3 class="reveal mt-3" style="color:var(--text-white);margin-bottom:1rem;text-align:center">Ejemplos de MCPs</h3>
+<div class="tag-cloud stagger" style="justify-content:center">
+<span class="tc">&#x1F418; PostgreSQL</span>
+<span class="tc">&#x1F4C1; Filesystem</span>
+<span class="tc">&#x2601;&#xFE0F; Azure / Fabric</span>
+<span class="tc">&#x1F4DA; Microsoft Learn</span>
+<span class="tc">&#x1F517; APIs externas</span>
+</div>
+<h3 class="reveal mt-3" style="color:var(--text-white);margin-bottom:.8rem;text-align:center">&#x2B50; Awesome Copilot</h3>
+<p class="reveal" style="color:var(--text-light-secondary);text-align:center;max-width:600px;margin:0 auto;font-size:.95rem">Agentes, prompts e instrucciones &#8594; <a href="https://github.com/github/awesome-copilot" style="color:var(--brand-secondary-light);text-decoration:underline">github/awesome-copilot</a></p>
+</div></section>
+
+
+
+
+
+<!-- PERSONAS: Orbit layout (DBA center) -->
+<section id="personas" class="alt-section">
+<div class="section-inner">
+<div class="section-label brand reveal"><span class="label-line"></span>Casos de uso por rol</div>
+<h2 class="section-title reveal">Copilot para cada perfil</h2>
+<p class="section-desc reveal">No es solo para devs. Cada rol tiene superpoderes específicos.</p>
+<div class="orbit reveal-scale">
+<div class="orbit-ring"></div>
+<div class="orbit-center"><div class="orbit-emoji">🗄️</div><h4>DBA</h4><p>SQL, esquemas, índices</p></div>
+<div class="orbit-node" style="top:10px;left:50%;transform:translateX(-50%)"><div class="on-emoji">👨‍💻</div><h5>Developer</h5></div>
+<div class="orbit-node" style="top:50%;right:0;transform:translateY(-50%)"><div class="on-emoji">🧪</div><h5>Tester / QA</h5></div>
+<div class="orbit-node" style="bottom:10px;left:50%;transform:translateX(-50%)"><div class="on-emoji">⚙️</div><h5>DevOps</h5></div>
+<div class="orbit-node" style="top:50%;left:0;transform:translateY(-50%)"><div class="on-emoji">🔒</div><h5>Security</h5></div>
+</div>
+<p class="reveal mt-3 text-center" style="font-size:1.1rem;max-width:700px;margin-left:auto;margin-right:auto"><strong>Foco DBA:</strong> Optimización SQL • Diseño de esquemas • Stored procedures • Recomendaciones de índices • Scripts de migración • Backup/Recovery • Debugging de queries • Queries analíticos</p>
+</div></section>
+
+
+
+<!-- AI DEV: Big text, no cards -->
+<section id="aidev" class="dark-section">
+<div class="section-inner">
+<div class="section-label coral reveal"><span class="label-line"></span>El cambio de paradigma</div>
+<h2 class="section-title reveal">El Desarrollador de Próxima Generación</h2>
+<p class="section-desc reveal">La forma en que construimos software cambió. De código manual a <strong style="color:var(--brand-secondary-light)">AI-Agentic DevOps</strong>.</p>
+<div class="two-col" style="gap:4rem">
+<div class="reveal-left">
+<h3 style="color:var(--danger);font-size:1rem;margin-bottom:1.5rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600">Antes</h3>
+<p style="font-size:clamp(1.8rem,3vw,2.4rem);font-family:var(--font-display);font-weight:300;color:var(--text-light-secondary);line-height:1.4;letter-spacing:-.02em">Modelo <strong style="color:var(--text-white)">singular</strong>. Código <strong style="color:var(--text-white)">manual</strong>. Lógica <strong style="color:var(--text-white)">determinista</strong>. Despliegue <strong style="color:var(--text-white)">humano</strong>. Monitoreo <strong style="color:var(--text-white)">reactivo</strong>.</p>
+</div>
+<div class="reveal-right">
+<h3 style="color:var(--brand-accent);font-size:1rem;margin-bottom:1.5rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600">Ahora</h3>
+<p style="font-size:clamp(1.8rem,3vw,2.4rem);font-family:var(--font-display);font-weight:300;color:var(--text-light-secondary);line-height:1.4;letter-spacing:-.02em"><strong style="color:var(--brand-secondary-light)">Multi-modelo</strong>. Flujos <strong style="color:var(--brand-secondary-light)">agénticos</strong>. Razonamiento <strong style="color:var(--brand-secondary-light)">adaptativo</strong>. Orquestación <strong style="color:var(--brand-secondary-light)">dinámica</strong>.</p>
+</div></div>
+<div class="callout warning reveal mt-3"><div class="cl-label">🔄 Para DBAs</div><blockquote>De <strong>“traducir requerimientos en SQL”</strong> a <strong>“definir el problema para que la IA lo resuelva y monitorear el rendimiento”</strong>.</blockquote></div>
+</div></section>
+
+
+
+<!-- AGENTS: flow + two-col compare (no cards!) -->
+<section id="agentes" class="dark-section">
+<div class="section-inner">
+<div class="section-label warm reveal"><span class="label-line"></span>Profundizando</div>
+<h2 class="section-title reveal">GitHub Agents: La próxima evolución</h2>
+<p class="section-desc reveal">Nuevos agentes resuelven problemas a lo largo de todo el ciclo de vida del software.</p>
+<div class="flow-h stagger reveal">
+<div class="flow-step"><div class="flow-num">💡</div><h4>Ideación</h4><p>Specs y diseño</p></div>
+<div class="flow-step"><div class="flow-num">📝</div><h4>Plan</h4><p>Arquitectura</p></div>
+<div class="flow-step"><div class="flow-num">💻</div><h4>Código</h4><p>Implementación</p></div>
+<div class="flow-step"><div class="flow-num">🧪</div><h4>Testing</h4><p>Pruebas auto</p></div>
+<div class="flow-step"><div class="flow-num">🔍</div><h4>Review</h4><p>Revisión IA</p></div>
+<div class="flow-step"><div class="flow-num">🚀</div><h4>Deploy</h4><p>Despliegue</p></div>
+</div>
+<h3 class="reveal mt-3" style="color:var(--text-white);margin-bottom:1.5rem;text-align:center">Agent Mode vs Coding Agent</h3>
+<div class="two-col">
+<div class="split-card reveal-left" style="background:rgba(0,165,229,.06);border:1px solid rgba(0,165,229,.2)">
+<h4 style="color:var(--brand-secondary-light)">💻 Agent Mode (en tu IDE)</h4>
+<ul class="check-list" style="color:var(--text-light)">
+<li><span class="icon">🟢</span> Trabaja dentro de VS Code</li>
+<li><span class="icon">🟢</span> Colaborador en tiempo real</li>
+<li><span class="icon">🟢</span> Itera sobre código y corre tests</li>
+<li><span class="icon">🟢</span> Tú diriges, él ejecuta</li>
+</ul></div>
+<div class="split-card reveal-right" style="background:rgba(249,115,22,.06);border:1px solid rgba(249,115,22,.2)">
+<h4 style="color:var(--brand-accent-coral)">🌐 Coding Agent (en GitHub)</h4>
+<ul class="check-list" style="color:var(--text-light)">
+<li><span class="icon">🟠</span> Toma issues asignados</li>
+<li><span class="icon">🟠</span> Escribe código y pasa tests</li>
+<li><span class="icon">🟠</span> Abre PRs automáticamente</li>
+<li><span class="icon">🟠</span> Compañero de equipo IA</li>
+</ul></div></div>
+<p class="reveal mt-3" style="color:var(--text-light-secondary);text-align:center;font-size:.9rem">📄 <strong style="color:var(--brand-secondary-light)">AGENTS.md</strong> — Nuevo formato soportado en VS Code. Un archivo de instrucciones para todos tus agentes. Compatible con <code>copilot-instructions.md</code>, <code>CLAUDE.md</code> y <code>GEMINI.md</code>.</p>
+</div></section>
+
+
+
+<!-- ONTOLOGIAS: bridge grid + big numbers (not cards) -->
+<section id="ontologias" class="dark-section">
+<div class="section-inner">
+<div class="section-label accent reveal"><span class="label-line"></span>Módulo 4 — El puente conceptual</div>
+<h2 class="section-title reveal">De BD Tradicional a Ontologías</h2>
+<p class="section-desc reveal">Ya sabes más de ontologías de lo que crees. Solo traduce los conceptos.</p>
+<div class="bridge-grid reveal-scale" style="max-width:800px;margin:0 auto">
+<div class="bridge-col stagger">
+<div class="bridge-item bd">🗄️ Tabla</div>
+<div class="bridge-item bd">📄 Fila</div>
+<div class="bridge-item bd">📊 Columna</div>
+<div class="bridge-item bd">🔗 FK</div>
+<div class="bridge-item bd">🔢 Tipo de Dato</div>
+<div class="bridge-item bd">🔒 Constraint</div>
+<div class="bridge-item bd">📖 Diccionario</div>
+<div class="bridge-item bd">📐 Modelo Lógico</div>
+<div class="bridge-item bd">💾 Datos</div>
+</div>
+<div class="bridge-arrows">
+<span class="bridge-arrow">→</span><span class="bridge-arrow">→</span><span class="bridge-arrow">→</span><span class="bridge-arrow">→</span><span class="bridge-arrow">→</span><span class="bridge-arrow">→</span><span class="bridge-arrow">→</span><span class="bridge-arrow">→</span><span class="bridge-arrow">→</span>
+</div>
+<div class="bridge-col stagger">
+<div class="bridge-item onto">🏛️ Clase</div>
+<div class="bridge-item onto">👤 Instancia</div>
+<div class="bridge-item onto">📋 Propiedad</div>
+<div class="bridge-item onto">🔗 Object Property</div>
+<div class="bridge-item onto">🔢 Datatype Property</div>
+<div class="bridge-item onto">📏 Axioma</div>
+<div class="bridge-item onto">📚 Vocabulario</div>
+<div class="bridge-item onto">🧠 TBox</div>
+<div class="bridge-item onto">📦 ABox</div>
+</div></div>
+
+<h3 class="reveal mt-3" style="color:var(--text-white);margin-bottom:1.5rem">¿Por qué ontologías para INEGI?</h3>
+<div class="big-nums stagger">
+<div class="big-num-row"><div class="num c1">01</div><div><h4>Vocabulario Común</h4><p>Un lenguaje compartido entre Economía, SocioDemografía, Gobierno y Geografía.</p></div></div>
+<div class="big-num-row"><div class="num c2">02</div><div><h4>Significado Explícito</h4><p>El LLM entiende “población económicamente activa” en lugar de <code>pea_15_mas</code>.</p></div></div>
+<div class="big-num-row"><div class="num c3">03</div><div><h4>Inferencia Automática</h4><p>La ontología deduce: “todo municipio pertenece a una entidad federativa”.</p></div></div>
+<div class="big-num-row"><div class="num c4">04</div><div><h4>Interoperabilidad</h4><p>Estándares W3C (RDF, OWL, SKOS). Cualquier consumidor de IA lee los datos.</p></div></div>
+<div class="big-num-row"><div class="num c5">05</div><div><h4>AI-Ready</h4><p>El LLM consume la ontología como contexto y responde con precisión semántica.</p></div></div>
+</div>
+</div></section>
+
+
+
+
+
+
+
+
+
+<footer>
+<div class="footer-logos"><img src="https://www.inegi.org.mx/img/home/logoinegibco.png" alt="INEGI"></div>
+<p>Taller GitHub Copilot &amp; Ontologías — INEGI 2026</p>
+</footer>
+
+<script>
+var ro=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('active')})},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale,.stagger').forEach(function(e){ro.observe(e)});
+window.addEventListener('scroll',function(){document.querySelector('nav').classList.toggle('scrolled',window.scrollY>60)},{passive:true});
+var hb=document.getElementById('hamburger'),nl=document.getElementById('navLinks');
+hb.addEventListener('click',function(){nl.classList.toggle('open')});
+hb.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();nl.classList.toggle('open')}});
+nl.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){nl.classList.remove('open')})});
+document.addEventListener('keydown',function(e){
+if(nl.classList.contains('open')){if(e.key==='Escape')nl.classList.remove('open');return}
+var ss=document.querySelectorAll('section');
+var ci=[].findIndex.call(ss,function(s){var r=s.getBoundingClientRect();return r.top>=-100&&r.top<=window.innerHeight/2});
+if(e.key==='ArrowDown'||e.key==='PageDown'){e.preventDefault();ss[Math.min(ci+1,ss.length-1)].scrollIntoView({behavior:'smooth'})}
+if(e.key==='ArrowUp'||e.key==='PageUp'){e.preventDefault();ss[Math.max(ci-1,0)].scrollIntoView({behavior:'smooth'})}
+});
+function animC(){document.querySelectorAll('[data-count]').forEach(function(el){
+var t=parseInt(el.dataset.count),sf=el.dataset.suffix||'',d=2e3,st=performance.now();
+function u(n){var p=Math.min((n-st)/d,1),ea=1-Math.pow(1-p,3);el.textContent=Math.floor(t*ea).toLocaleString('es-MX')+sf;if(p<1)requestAnimationFrame(u)}
+requestAnimationFrame(u)})}
+var co=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){animC();co.disconnect()}})},{threshold:.3});
+var hs=document.querySelector('.hero-stats');if(hs)co.observe(hs);
+</script>
+</body>
+</html>
